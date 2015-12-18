@@ -8,4 +8,9 @@ Vagrant.configure(2) do |config|
     shell.path = "shell/bootstrap.sh"
   end
 
+  config.vm.provision "puppet" do |puppet|
+    puppet.environment = "bootstrap"
+    puppet.environment_path = "puppet"
+  end
+
 end

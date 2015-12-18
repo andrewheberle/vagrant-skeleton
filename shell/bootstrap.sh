@@ -6,7 +6,8 @@
 #PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 # Base path for files
-declare BASEPATH=/vagrant/shell
+declare VAGRANT=/vagrant
+declare BASEPATH=${VAGRANT}/shell
 
 # Tool to download via http/https
 declare HTTPGET="curl"
