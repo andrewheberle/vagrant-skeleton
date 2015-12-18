@@ -4,7 +4,7 @@ exec { 'r10k-install':
 }
 
 exec { 'r10k':
-  command => '/opt/puppetlabs/puppet/bin/r10k deploy environment -p',
+  command => '/opt/puppetlabs/puppet/bin/r10k puppetfile install',
   cwd     => '/vagrant/puppet/bootstrap',
   require => Exec['r10k-install'],
 }
