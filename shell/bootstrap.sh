@@ -25,6 +25,12 @@ declare PKG_INSTALL_CMD
 declare PUPPETLABS_PKG_URL
 declare PUPPETLABS_PKG
 
+# Puppet locations
+declare PUPPET_BASEPATH=${VAGRANT}/puppet
+declare PUPPET_ENVIRONMENT=bootstrap
+declare PUPPETLABS_OPT_DIR=/opt/puppetlabs
+declare PUPPET_GEM=${PUPPETLABS_OPT_DIR}/puppet/bin/gem
+
 function cleanup() {
 	[ -f ${PUPPETLABS_PKG} ] && rm -f ${PUPPETLABS_PKG}
 }
@@ -95,5 +101,20 @@ do
 		done
 	fi
 done
+
+# If Puppetfile exists, install r10k and install modules
+if [ -f "${PUPPET_BASEPATH}/${PUPPET_ENVIRONMENT}/Puppetfile" ]
+then
+	if [ -f "${PUPPET_GEM}" ]
+	then
+		${PUPPET_GEM} install r10k
+		if [ -f ${PUPPET_R10K} ]
+		then
+			pushd ${PUPPET_BASEPATH}/${PUPPET_ENVIRONMENT}
+			${PUPPET_R10K} puppetfile install
+			popd
+		fi
+	fi
+fi
 
 exit 0
