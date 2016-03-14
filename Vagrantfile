@@ -2,10 +2,11 @@
 # vi: set ft=ruby :
 
 Vagrant.configure(2) do |config|
-  config.vm.box = "bento/centos-7.1"
+  config.vm.box = "bento/centos-6.7"
 
   config.vm.provision "shell" do |shell|
     shell.path = "shell/bootstrap.sh"
+    shell.binary = false
   end
 
   config.vm.provision "puppet" do |puppet|
