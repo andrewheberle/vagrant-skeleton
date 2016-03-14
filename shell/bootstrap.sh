@@ -9,6 +9,9 @@
 declare VAGRANT=/vagrant
 declare BASEPATH=${VAGRANT}/shell
 
+# Perform package update or not (1 = Yes, 0 = No)
+declare PKG_UPDATE="1"
+
 # Tool to download via http/https
 declare HTTPGET="curl"
 declare HTTPGET_OPTS="-O -s"
@@ -94,6 +97,7 @@ case "${DISTRO}" in
 		PKG_MGR_OPTS="-qq -y -o=Dpkg::Use-Pty=0"
 		PUPPETLABS_PKG_URL="https://apt.puppetlabs.com"
 		PUPPETLABS_PKG="puppetlabs-release-pc1-${RELEASE}.deb"
+		PKG_UPDATE_CMD="${PKG_MGR} ${PKG_MGR_OPTS} update && ${PKG_MGR} ${PKG_MGR_OPTS} dist-upgrade"
 		PKG_INSTALL_CMD="dpkg -i ${PUPPETLABS_PKG} && ${PKG_MGR} ${PKG_MGR_OPTS} update"
 	;;
 	"CentOS")
@@ -102,6 +106,7 @@ case "${DISTRO}" in
 		PKG_MGR_OPTS="-q -y"
 		PUPPETLABS_PKG_URL="https://yum.puppetlabs.com"
 		PUPPETLABS_PKG="puppetlabs-release-pc1-el-${RELEASE}.noarch.rpm"
+		PKG_UPDATE_CMD="${PKG_MGR} ${PKG_MGR_OPTS} update"
 		PKG_INSTALL_CMD="rpm -U --quiet ${PUPPETLABS_PKG}"
 	;;
 	*)
@@ -109,6 +114,12 @@ case "${DISTRO}" in
 		exit 1
 	;;
 esac
+
+# Upgrade packages if required
+if [ "${PKG_UPDATE}" -eq "1" ]; then
+	echo "Updating packages..."
+	eval "${PKG_UPDATE_CMD}"
+fi
 
 # Install Puppet Labs repo
 echo "Downloading ${PUPPETLABS_PKG}..."
